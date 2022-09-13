@@ -7,11 +7,17 @@ fn main() {
     cc::Build::new()
         .cpp(true)
         .file("src/VHACD.cpp")
+        .shared_flag(true)
+        //.static_flag(true)
         .define("ENABLE_VHACD_IMPLEMENTATION", "1")
         .compile("v-hacd");
 
     let bindings = bindgen::Builder::default()
         .header("src/VHACD.cpp")
+        .allowlist_function("VHACD.*")
+        .allowlist_type("VHACD.*")
+        .blocklist_function("std_.*")
+        .blocklist_type("std_.*")
         .generate()
         .expect("Unable to generate bindings");
 
